@@ -1,4 +1,4 @@
-# 📚 NodeJS & Operating Systems - Interactive Slides
+# 📚 NodeJS & Operating Systems
 
 An engaging and interactive web-based slide deck that teaches the fundamentals of **NodeJS programming** and **Operating System concepts**. Perfect for students, developers, and tech enthusiasts who want to understand both software development and the underlying system processes.
 
