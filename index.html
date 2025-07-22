@@ -1,0 +1,1237 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>NodeJS & Operating Systems</title>
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-tomorrow.min.css"
+    />
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <div class="progress-bar" id="progressBar"></div>
+    <div class="slide-counter" id="slideCounter">1 / 20</div>
+
+    <div class="slider-container">
+      <!-- Slide 1: Title -->
+      <div class="slide active">
+        <h1>NodeJS & Operating Systems</h1>
+        <div class="section-divider">
+          <span>Complete Interactive Guide</span>
+        </div>
+
+        <div class="two-column">
+          <div>
+            <h3>🟢 NodeJS Topics</h3>
+            <ul>
+              <li>What is NodeJS and why use it</li>
+              <li>Writing NodeJS programs</li>
+              <li>Zero-dependency programs</li>
+              <li>Using npm dependencies</li>
+              <li>Understanding libraries</li>
+            </ul>
+          </div>
+
+          <div>
+            <h3>🖥️ Operating Systems</h3>
+            <ul>
+              <li>Operating systems and kernels</li>
+              <li>Processes and system calls</li>
+              <li>Process spelunking workshop</li>
+              <li>File descriptors and tools</li>
+              <li>Hands-on debugging</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="highlight-box">
+          <h3>🎯 Learning Objectives</h3>
+          <p>
+            By the end of this presentation, you'll understand how to build
+            NodeJS applications, work with dependencies, and dive deep into
+            operating system concepts through practical exercises.
+          </p>
+        </div>
+      </div>
+
+      <!-- Slide 2: What is NodeJS -->
+      <div class="slide">
+        <h2>🟢 What is NodeJS?</h2>
+
+        <div class="highlight-box">
+          <h3>NodeJS Definition</h3>
+          <p>
+            NodeJS is a JavaScript runtime built on Chrome's V8 JavaScript
+            engine that allows you to run JavaScript code outside of a web
+            browser.
+          </p>
+        </div>
+
+        <h3>Why Use NodeJS?</h3>
+        <ul>
+          <li>
+            <strong>Server-side JavaScript:</strong> Use the same language for
+            frontend and backend
+          </li>
+          <li>
+            <strong>Fast and Scalable:</strong> Non-blocking I/O and
+            event-driven architecture
+          </li>
+          <li>
+            <strong>Large Ecosystem:</strong> Massive npm package repository
+          </li>
+          <li>
+            <strong>Cross-platform:</strong> Runs on Windows, macOS, and Linux
+          </li>
+          <li>
+            <strong>Real-time Applications:</strong> Perfect for chat apps,
+            APIs, and microservices
+          </li>
+        </ul>
+
+        <div class="two-column">
+          <div>
+            <h3>✅ Great for:</h3>
+            <ul>
+              <li>REST APIs</li>
+              <li>Real-time applications</li>
+              <li>Microservices</li>
+              <li>Command-line tools</li>
+              <li>Build tools</li>
+            </ul>
+          </div>
+
+          <div>
+            <h3>❌ Not ideal for:</h3>
+            <ul>
+              <li>CPU-intensive tasks</li>
+              <li>Complex mathematical operations</li>
+              <li>Heavy computational work</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <!-- Slide 3: Writing NodeJS Program -->
+      <div class="slide">
+        <h2>Writing Your First NodeJS Program</h2>
+
+        <h3>Basic "Hello World" Example</h3>
+        <pre><code class="language-javascript">// hello.js
+console.log("Hello, World!");
+console.log("Welcome to NodeJS!");
+
+// Get command line arguments
+const args = process.argv.slice(2);
+if (args.length > 0) {
+    console.log(`Hello, ${args[0]}!`);
+}</code></pre>
+
+        <div class="terminal">
+          node hello.js # Output: Hello, World! # Welcome to NodeJS! node
+          hello.js Alice # Output: Hello, World! # Welcome to NodeJS! # Hello,
+          Alice!
+        </div>
+
+        <h3>Key NodeJS Global Objects</h3>
+        <ul>
+          <li>
+            <span class="inline-code">process</span> - Information about the
+            current process
+          </li>
+          <li><span class="inline-code">console</span> - Output to terminal</li>
+          <li>
+            <span class="inline-code">__dirname</span> - Current directory path
+          </li>
+          <li>
+            <span class="inline-code">__filename</span> - Current file path
+          </li>
+        </ul>
+      </div>
+
+      <!-- Slide 4: Zero Dependencies Program -->
+      <div class="slide">
+        <h2>Zero-Dependencies NodeJS Program</h2>
+
+        <div class="highlight-box">
+          <h3>What does "Zero Dependencies" mean?</h3>
+          <p>
+            A program that only uses NodeJS built-in modules without requiring
+            external npm packages.
+          </p>
+        </div>
+
+        <h3>File System Example</h3>
+        <pre><code class="language-javascript">// file-reader.js
+const fs = require('fs');
+const path = require('path');
+
+// Read current directory
+const currentDir = process.cwd();
+console.log(`Current directory: ${currentDir}`);
+
+// List files in directory
+fs.readdir(currentDir, (err, files) => {
+    if (err) {
+        console.error('Error reading directory:', err);
+        return;
+    }
+    
+    console.log('\nFiles in current directory:');
+    files.forEach(file => {
+        const filePath = path.join(currentDir, file);
+        const stats = fs.statSync(filePath);
+        const type = stats.isDirectory() ? 'DIR' : 'FILE';
+        console.log(`${type}: ${file}`);
+    });
+});</code></pre>
+
+        <h3>Built-in Modules You Can Use</h3>
+        <div class="two-column">
+          <div>
+            <ul>
+              <li><span class="inline-code">fs</span> - File system</li>
+              <li>
+                <span class="inline-code">http</span> - HTTP server/client
+              </li>
+              <li><span class="inline-code">path</span> - File paths</li>
+              <li><span class="inline-code">os</span> - Operating system</li>
+            </ul>
+          </div>
+          <div>
+            <ul>
+              <li><span class="inline-code">crypto</span> - Cryptography</li>
+              <li><span class="inline-code">url</span> - URL parsing</li>
+              <li><span class="inline-code">util</span> - Utilities</li>
+              <li><span class="inline-code">events</span> - Event emitter</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <!-- Slide 5: What is a Library -->
+      <div class="slide">
+        <h2>📚 What is a Library?</h2>
+
+        <div class="highlight-box">
+          <h3>Library Definition</h3>
+          <p>
+            A library is a collection of pre-written code that provides specific
+            functionality you can use in your programs without writing it from
+            scratch.
+          </p>
+        </div>
+
+        <h3>Types of Libraries</h3>
+        <div class="two-column">
+          <div>
+            <h4>🔧 Utility Libraries</h4>
+            <ul>
+              <li><strong>lodash</strong> - Data manipulation</li>
+              <li><strong>moment</strong> - Date handling</li>
+              <li><strong>axios</strong> - HTTP requests</li>
+            </ul>
+
+            <h4>🖼️ UI Libraries</h4>
+            <ul>
+              <li><strong>express</strong> - Web framework</li>
+              <li><strong>react</strong> - UI components</li>
+              <li><strong>chalk</strong> - Terminal colors</li>
+            </ul>
+          </div>
+
+          <div>
+            <h4>🎯 Why Use Libraries?</h4>
+            <ul>
+              <li><strong>Save Time:</strong> Don't reinvent the wheel</li>
+              <li>
+                <strong>Reliability:</strong> Tested by thousands of users
+              </li>
+              <li><strong>Maintenance:</strong> Updates and bug fixes</li>
+              <li><strong>Community:</strong> Documentation and support</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="warning-box">
+          <h3>⚠️ Library Considerations</h3>
+          <ul>
+            <li>
+              <strong>Dependencies:</strong> More libraries = larger app size
+            </li>
+            <li>
+              <strong>Security:</strong> Third-party code can have
+              vulnerabilities
+            </li>
+            <li><strong>Maintenance:</strong> Libraries can become outdated</li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- Slide 6: Installing with npm -->
+      <div class="slide">
+        <h2>📦 Installing Dependencies with npm</h2>
+
+        <div class="highlight-box">
+          <h3>What is npm?</h3>
+          <p>
+            npm (Node Package Manager) is the default package manager for NodeJS
+            that helps you install, update, and manage dependencies.
+          </p>
+        </div>
+
+        <h3>Essential npm Commands</h3>
+        <pre><code class="language-bash"># Initialize a new project
+npm init -y
+
+# Install a package locally
+npm install express
+
+# Install globally
+npm install -g nodemon
+
+# Install as development dependency
+npm install --save-dev jest
+
+# Install specific version
+npm install lodash@4.17.21</code></pre>
+
+        <h3>Understanding package.json</h3>
+        <pre><code class="language-json">{
+  "name": "my-node-app",
+  "version": "1.0.0",
+  "description": "My awesome NodeJS application",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js",
+    "dev": "nodemon index.js",
+    "test": "jest"
+  },
+  "dependencies": {
+    "express": "^4.18.2",
+    "axios": "^1.4.0"
+  },
+  "devDependencies": {
+    "jest": "^29.5.0",
+    "nodemon": "^2.0.22"
+  }
+}</code></pre>
+      </div>
+
+      <!-- Slide 7: Using Dependencies -->
+      <div class="slide">
+        <h2>Using Dependencies in NodeJS</h2>
+
+        <h3>Step-by-Step Example</h3>
+        <div class="terminal">
+          mkdir my-web-app cd my-web-app npm init -y npm install express axios
+        </div>
+
+        <h3>Creating a Simple Web Server</h3>
+        <pre><code class="language-javascript">// server.js
+const express = require('express');
+const axios = require('axios');
+
+const app = express();
+const PORT = 3000;
+
+// Middleware to parse JSON
+app.use(express.json());
+
+// Route to get joke from external API
+app.get('/joke', async (req, res) => {
+    try {
+        const response = await axios.get('https://official-joke-api.appspot.com/random_joke');
+        const joke = response.data;
+        
+        res.json({
+            setup: joke.setup,
+            punchline: joke.punchline,
+            timestamp: new Date().toISOString()
+        });
+    } catch (error) {
+        res.status(500).json({ error: 'Failed to fetch joke' });
+    }
+});
+
+// Start server
+app.listen(PORT, () => {
+    console.log(`Server running on http://localhost:${PORT}`);
+    console.log(`Try visiting: http://localhost:${PORT}/joke`);
+});</code></pre>
+
+        <div class="terminal">
+          node server.js # Server running on http://localhost:3000 # Try
+          visiting: http://localhost:3000/joke
+        </div>
+      </div>
+
+      <!-- Slide 8: Operating Systems -->
+      <div class="slide">
+        <h1>🖥️ Operating Systems</h1>
+        <div class="section-divider">
+          <span>Understanding the Foundation</span>
+        </div>
+
+        <div class="highlight-box">
+          <h3>What is an Operating System?</h3>
+          <p>
+            An operating system (OS) is system software that manages computer
+            hardware, software resources, and provides common services for
+            computer programs.
+          </p>
+        </div>
+
+        <h3>Key Functions of an OS</h3>
+        <div class="two-column">
+          <div>
+            <h4>🔧 Resource Management</h4>
+            <ul>
+              <li>CPU scheduling</li>
+              <li>Memory allocation</li>
+              <li>Storage management</li>
+              <li>Device control</li>
+            </ul>
+          </div>
+
+          <div>
+            <h4>🛡️ System Services</h4>
+            <ul>
+              <li>Process management</li>
+              <li>File systems</li>
+              <li>Network communication</li>
+              <li>Security and permissions</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="success-box">
+          <h3>🌟 Popular Operating Systems</h3>
+          <p>
+            <strong>Desktop:</strong> Windows, macOS, Linux (Ubuntu, Fedora,
+            etc.)
+          </p>
+          <p><strong>Mobile:</strong> Android, iOS</p>
+          <p><strong>Server:</strong> Linux distributions, Windows Server</p>
+        </div>
+      </div>
+
+      <!-- Slide 9: What is a Kernel -->
+      <div class="slide">
+        <h2>🔧 What is a Kernel?</h2>
+
+        <div class="highlight-box">
+          <h3>Kernel Definition</h3>
+          <p>
+            The kernel is the core component of an operating system that manages
+            system resources and provides a bridge between applications and
+            hardware.
+          </p>
+        </div>
+
+        <h3>Kernel Responsibilities</h3>
+        <div class="process-flow">
+          <div class="process-step">Applications</div>
+          <div class="arrow">↓</div>
+          <div class="process-step">System Calls</div>
+          <div class="arrow">↓</div>
+          <div class="process-step">Kernel</div>
+          <div class="arrow">↓</div>
+          <div class="process-step">Hardware</div>
+        </div>
+
+        <div class="two-column">
+          <div>
+            <h4>⚡ Process Management</h4>
+            <ul>
+              <li>Creating and terminating processes</li>
+              <li>Scheduling CPU time</li>
+              <li>Inter-process communication</li>
+              <li>Memory protection</li>
+            </ul>
+          </div>
+
+          <div>
+            <h4>💾 Hardware Interface</h4>
+            <ul>
+              <li>Device drivers</li>
+              <li>Memory management</li>
+              <li>File system access</li>
+              <li>Network protocols</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="warning-box">
+          <h3>🔒 Kernel Space vs User Space</h3>
+          <p>
+            <strong>Kernel Space:</strong> Protected area where kernel runs with
+            full hardware access
+          </p>
+          <p>
+            <strong>User Space:</strong> Where regular applications run with
+            restricted access
+          </p>
+        </div>
+      </div>
+
+      <!-- Slide 10: What is a Process -->
+      <div class="slide">
+        <h2>🏃‍♂️ What is a Process?</h2>
+
+        <div class="highlight-box">
+          <h3>Process Definition</h3>
+          <p>
+            A process is a running instance of a program. When you execute a
+            program, the operating system creates a process to run that program.
+          </p>
+        </div>
+
+        <h3>Program vs Process</h3>
+        <div class="two-column">
+          <div>
+            <h4>📄 Program</h4>
+            <ul>
+              <li>Code stored on disk</li>
+              <li>Static file</li>
+              <li>Instructions waiting to be executed</li>
+              <li>Example: <span class="inline-code">firefox</span> binary</li>
+            </ul>
+          </div>
+
+          <div>
+            <h4>⚡ Process</h4>
+            <ul>
+              <li>Program loaded into memory</li>
+              <li>Dynamic, active instance</li>
+              <li>Has Process ID (PID)</li>
+              <li>Example: Firefox running with PID 1234</li>
+            </ul>
+          </div>
+        </div>
+
+        <h3>Process Components</h3>
+        <ul>
+          <li>
+            <strong>Process ID (PID):</strong> Unique identifier assigned by the
+            OS
+          </li>
+          <li><strong>Memory Space:</strong> Code, data, stack, heap areas</li>
+          <li>
+            <strong>File Descriptors:</strong> Open files and network
+            connections
+          </li>
+          <li><strong>Environment:</strong> Variables and working directory</li>
+          <li><strong>State:</strong> Running, waiting, stopped, etc.</li>
+        </ul>
+
+        <div class="terminal">
+          ps aux | head -5 # USER PID %CPU %MEM VSZ RSS TTY STAT START TIME
+          COMMAND # root 1 0.0 0.1 167648 11504 ? Ss 08:00 0:01 /sbin/init #
+          root 2 0.0 0.0 0 0 ? S 08:00 0:00 [kthreadd] # john 1234 2.1 3.4
+          342432 67584 ? Sl 09:15 0:45 firefox
+        </div>
+      </div>
+
+      <!-- Slide 11: Process Creation Example -->
+      <div class="slide">
+        <h2>
+          Process Creation: <span class="inline-code">ls | grep '[A-Z]'</span>
+        </h2>
+
+        <div class="highlight-box">
+          <h3>What processes are created?</h3>
+          <p>
+            When you run <span class="inline-code">ls | grep '[A-Z]'</span>, the
+            shell creates TWO separate processes connected by a pipe.
+          </p>
+        </div>
+
+        <div class="process-flow">
+          <div class="process-step">Shell Process</div>
+          <div class="arrow">creates</div>
+          <div class="process-step">ls Process</div>
+          <div class="arrow">|</div>
+          <div class="process-step">grep Process</div>
+        </div>
+
+        <h3>Step-by-Step Breakdown</h3>
+        <ol>
+          <li>
+            <strong>Shell parses command:</strong> Recognizes pipe operator
+            <span class="inline-code">|</span>
+          </li>
+          <li>
+            <strong>Creates ls process:</strong> Runs
+            <span class="inline-code">/bin/ls</span> program
+          </li>
+          <li>
+            <strong>Creates grep process:</strong> Runs
+            <span class="inline-code">/bin/grep</span> program
+          </li>
+          <li>
+            <strong>Sets up pipe:</strong> Connects ls stdout to grep stdin
+          </li>
+          <li>
+            <strong>Processes run:</strong> ls lists files, grep filters them
+          </li>
+          <li>
+            <strong>Cleanup:</strong> Both processes terminate, shell continues
+          </li>
+        </ol>
+
+        <div class="two-column">
+          <div>
+            <h4>📋 ls Process</h4>
+            <ul>
+              <li>Program: <span class="inline-code">/bin/ls</span></li>
+              <li>Function: List directory contents</li>
+              <li>Output: Goes to pipe (not terminal)</li>
+            </ul>
+          </div>
+
+          <div>
+            <h4>🔍 grep Process</h4>
+            <ul>
+              <li>Program: <span class="inline-code">/bin/grep</span></li>
+              <li>Function: Filter lines matching pattern</li>
+              <li>Input: Comes from pipe</li>
+              <li>Output: Goes to terminal</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <!-- Slide 12: System Calls -->
+      <div class="slide">
+        <h2>🔧 System Calls (syscalls)</h2>
+
+        <div class="highlight-box">
+          <h3>System Call Definition</h3>
+          <p>
+            A system call (syscall) is a request made by a program to the
+            operating system kernel to perform a privileged operation on behalf
+            of the program.
+          </p>
+        </div>
+
+        <h3>Why Do We Need System Calls?</h3>
+        <ul>
+          <li>
+            <strong>Hardware Protection:</strong> User programs can't directly
+            access hardware
+          </li>
+          <li>
+            <strong>Resource Management:</strong> Kernel controls access to
+            files, network, etc.
+          </li>
+          <li>
+            <strong>Security:</strong> Prevents programs from interfering with
+            each other
+          </li>
+          <li>
+            <strong>Abstraction:</strong> Provides consistent interface across
+            different hardware
+          </li>
+        </ul>
+
+        <div class="process-flow">
+          <div class="process-step">User Program</div>
+          <div class="arrow">syscall</div>
+          <div class="process-step">Kernel</div>
+          <div class="arrow">hardware</div>
+          <div class="process-step">Hardware</div>
+        </div>
+
+        <h3>Three Examples of System Calls</h3>
+        <div class="two-column">
+          <div>
+            <h4>1. 📁 File Operations</h4>
+            <ul>
+              <li><span class="inline-code">open()</span> - Open a file</li>
+              <li><span class="inline-code">read()</span> - Read from file</li>
+              <li><span class="inline-code">write()</span> - Write to file</li>
+              <li><span class="inline-code">close()</span> - Close file</li>
+            </ul>
+          </div>
+
+          <div>
+            <h4>2. 🏃‍♂️ Process Management</h4>
+            <ul>
+              <li>
+                <span class="inline-code">fork()</span> - Create new process
+              </li>
+              <li><span class="inline-code">exec()</span> - Execute program</li>
+              <li>
+                <span class="inline-code">exit()</span> - Terminate process
+              </li>
+              <li>
+                <span class="inline-code">wait()</span> - Wait for child process
+              </li>
+            </ul>
+          </div>
+        </div>
+
+        <h4>3. 🌐 Network Operations</h4>
+        <ul>
+          <li>
+            <span class="inline-code">socket()</span> - Create network socket
+          </li>
+          <li>
+            <span class="inline-code">connect()</span> - Connect to remote host
+          </li>
+          <li>
+            <span class="inline-code">send()</span> - Send data over network
+          </li>
+          <li>
+            <span class="inline-code">recv()</span> - Receive network data
+          </li>
+        </ul>
+      </div>
+
+      <!-- Slide 13: Workshop Introduction -->
+      <div class="slide">
+        <h1>🔬 Workshop: Process Spelunking</h1>
+        <div class="section-divider"><span>Hands-On Linux Debugging</span></div>
+
+        <div class="highlight-box">
+          <h3>Workshop Overview</h3>
+          <p>
+            Learn to use essential Linux tools to investigate running processes,
+            open files, and system calls. Perfect for debugging and
+            understanding system behavior!
+          </p>
+        </div>
+
+        <h3>🛠️ Tools We'll Master</h3>
+        <div class="two-column">
+          <div>
+            <h4>📊 ps (Process Status)</h4>
+            <ul>
+              <li>Find running processes</li>
+              <li>Show process information</li>
+              <li>Monitor system activity</li>
+            </ul>
+
+            <h4>📁 lsof (List Open Files)</h4>
+            <ul>
+              <li>See what files a process has open</li>
+              <li>Find network connections</li>
+              <li>Understand file descriptors</li>
+            </ul>
+          </div>
+
+          <div>
+            <h4>🔍 strace (System Call Trace)</h4>
+            <ul>
+              <li>Monitor system calls in real-time</li>
+              <li>Debug program behavior</li>
+              <li>Understand kernel interactions</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="success-box">
+          <h3>🎯 What You'll Learn</h3>
+          <ul>
+            <li>How to find and monitor processes</li>
+            <li>Understanding file descriptors</li>
+            <li>Tracing system calls</li>
+            <li>Debugging techniques for real-world problems</li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- Slide 14: Finding PIDs with ps -->
+      <div class="slide">
+        <h2>🔍 Finding Process IDs with <span class="inline-code">ps</span></h2>
+
+        <div class="highlight-box">
+          <h3>What is a PID?</h3>
+          <p>
+            A Process ID (PID) is a unique number assigned by the operating
+            system to identify each running process.
+          </p>
+        </div>
+
+        <h3>Essential ps Commands</h3>
+        <pre><code class="language-bash"># Show all processes with full details
+ps aux
+
+# Show your processes only
+ps -u $USER
+
+# Show process tree
+ps -ef --forest
+
+# Find specific process
+ps aux | grep firefox
+
+# Show processes by name
+pgrep firefox
+
+# Show detailed info for specific PID
+ps -p 1234 -o pid,ppid,cmd,%cpu,%mem</code></pre>
+
+        <h3>Understanding ps Output</h3>
+        <pre><code>USER    PID  %CPU %MEM    VSZ   RSS TTY   STAT START   TIME COMMAND
+john  12345   0.1  0.5  25432  8192 pts/0 S+   14:23   0:00 python3 app.py</code></pre>
+
+        <div class="two-column">
+          <div>
+            <h4>📊 Key Columns</h4>
+            <ul>
+              <li><strong>PID:</strong> Process ID</li>
+              <li><strong>%CPU:</strong> CPU usage</li>
+              <li><strong>%MEM:</strong> Memory usage</li>
+              <li><strong>VSZ:</strong> Virtual memory size</li>
+            </ul>
+          </div>
+
+          <div>
+            <h4>🔤 Process States</h4>
+            <ul>
+              <li><strong>S:</strong> Sleeping (waiting)</li>
+              <li><strong>R:</strong> Running</li>
+              <li><strong>Z:</strong> Zombie</li>
+              <li><strong>T:</strong> Stopped</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="terminal">
+          # Try this: Run a Python script and find its PID python3 -c "import
+          time; time.sleep(60)" & ps aux | grep python
+        </div>
+      </div>
+
+      <!-- Slide 15: File Descriptors -->
+      <div class="slide">
+        <h2>📁 File Descriptors Explained</h2>
+
+        <div class="highlight-box">
+          <h3>File Descriptor Definition</h3>
+          <p>
+            A file descriptor (FD) is a number that the operating system assigns
+            to each open file, socket, or pipe in a process. It's like a
+            "handle" to access the resource.
+          </p>
+        </div>
+
+        <h3>Standard File Descriptors</h3>
+        <div class="two-column">
+          <div>
+            <h4>🔢 The Big Three</h4>
+            <ul>
+              <li><strong>0 (stdin):</strong> Standard input</li>
+              <li><strong>1 (stdout):</strong> Standard output</li>
+              <li><strong>2 (stderr):</strong> Standard error</li>
+            </ul>
+          </div>
+
+          <div>
+            <h4>📈 Custom File Descriptors</h4>
+            <ul>
+              <li><strong>3, 4, 5...:</strong> Files opened by program</li>
+              <li>
+                <strong>Each open() call gets next available number</strong>
+              </li>
+              <li><strong>Released when file is closed</strong></li>
+            </ul>
+          </div>
+        </div>
+
+        <h3>File Descriptor Example</h3>
+        <pre><code class="language-python"># fd_example.py
+import os
+
+print(f"PID: {os.getpid()}")
+print("Opening files...")
+
+# These will get file descriptors 3, 4, 5
+file1 = open("test1.txt", "w")
+file2 = open("test2.txt", "r") 
+file3 = open("test3.txt", "a")
+
+print(f"File 1 FD: {file1.fileno()}")  # Usually 3
+print(f"File 2 FD: {file2.fileno()}")  # Usually 4
+print(f"File 3 FD: {file3.fileno()}")  # Usually 5
+
+input("Press enter to close files...")
+file1.close()
+file2.close() 
+file3.close()</code></pre>
+
+        <div class="warning-box">
+          <h3>💡 Fun Facts</h3>
+          <ul>
+            <li>
+              File descriptors are per-process (each process has its own set)
+            </li>
+            <li>They're reused when files are closed</li>
+            <li>Network sockets also use file descriptors!</li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- Slide 16: Using lsof -->
+      <div class="slide">
+        <h2>
+          🔍 Listing Open Files with <span class="inline-code">lsof</span>
+        </h2>
+
+        <h3>Essential lsof Commands</h3>
+        <pre><code class="language-bash"># List all open files for a process
+lsof -p 1234
+
+# List open files for all processes of a user
+lsof -u john
+
+# List processes using a specific file
+lsof /path/to/file
+
+# Show network connections
+lsof -i
+
+# Show only TCP connections
+lsof -i tcp
+
+# Monitor in real-time
+lsof -p 1234 -r 1</code></pre>
+
+        <h3>Understanding lsof Output</h3>
+        <pre><code>COMMAND   PID USER   FD   TYPE DEVICE SIZE/OFF    NODE NAME
+python3  1234 john  cwd    DIR  253,0     4096  131074 /home/john
+python3  1234 john    0u   CHR  136,0      0t0       3 /dev/pts/0
+python3  1234 john    1u   CHR  136,0      0t0       3 /dev/pts/0
+python3  1234 john    2u   CHR  136,0      0t0       3 /dev/pts/0
+python3  1234 john    3w   REG  253,0        0  131076 /home/john/output.txt</code></pre>
+
+        <div class="two-column">
+          <div>
+            <h4>📋 FD Column Values</h4>
+            <ul>
+              <li><strong>cwd:</strong> Current working directory</li>
+              <li><strong>txt:</strong> Program executable</li>
+              <li><strong>0u, 1u, 2u:</strong> stdin, stdout, stderr</li>
+              <li><strong>3w:</strong> File descriptor 3, write mode</li>
+              <li><strong>4r:</strong> File descriptor 4, read mode</li>
+            </ul>
+          </div>
+
+          <div>
+            <h4>🗂️ TYPE Column</h4>
+            <ul>
+              <li><strong>DIR:</strong> Directory</li>
+              <li><strong>REG:</strong> Regular file</li>
+              <li><strong>CHR:</strong> Character device</li>
+              <li><strong>FIFO:</strong> Named pipe</li>
+              <li><strong>IPv4:</strong> Network socket</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="success-box">
+          <h3>🎯 Practical Uses</h3>
+          <ul>
+            <li>
+              <strong>Debug:</strong> "Why can't I delete this file?" → Check
+              what has it open
+            </li>
+            <li>
+              <strong>Security:</strong> "What network connections does this
+              process have?"
+            </li>
+            <li>
+              <strong>Performance:</strong> "How many files does this app have
+              open?"
+            </li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- Slide 17: System Call Tracing -->
+      <div class="slide">
+        <h2>
+          🔬 System Call Tracing with <span class="inline-code">strace</span>
+        </h2>
+
+        <div class="highlight-box">
+          <h3>What does strace do?</h3>
+          <p>
+            strace intercepts and displays system calls made by a process,
+            showing you exactly how a program interacts with the kernel.
+          </p>
+        </div>
+
+        <h3>Basic strace Commands</h3>
+        <pre><code class="language-bash"># Trace all system calls of a command
+strace ls
+
+# Trace specific system calls only
+strace -e trace=open,read,write ls
+
+# Trace a running process by PID
+strace -p 1234
+
+# Save output to file
+strace -o trace.log ls
+
+# Show timestamps
+strace -t ls
+
+# Follow child processes
+strace -f ./parent_process</code></pre>
+
+        <h3>Sample strace Output</h3>
+        <pre><code class="language-bash">$ strace -e trace=openat,read,write echo "hello"
+
+openat(AT_FDCWD, "/lib/x86_64-linux-gnu/libc.so.6", O_RDONLY|O_CLOEXEC) = 3
+read(3, "\177ELF\2\1\1\3\0\0\0\0\0\0\0\0...", 832) = 832
+write(1, "hello\n", 6) = 6</code></pre>
+
+        <div class="two-column">
+          <div>
+            <h4>📖 Reading strace Output</h4>
+            <ul>
+              <li>
+                <strong>openat(...):</strong> System call name and arguments
+              </li>
+              <li><strong>= 3:</strong> Return value (file descriptor)</li>
+              <li><strong>read(3, ...):</strong> Read from FD 3</li>
+              <li><strong>write(1, ...):</strong> Write to FD 1 (stdout)</li>
+            </ul>
+          </div>
+
+          <div>
+            <h4>🎯 Common System Calls</h4>
+            <ul>
+              <li><strong>openat/open:</strong> Open files</li>
+              <li><strong>read/write:</strong> File I/O</li>
+              <li><strong>close:</strong> Close files</li>
+              <li><strong>mmap:</strong> Memory mapping</li>
+              <li><strong>clone/fork:</strong> Create processes</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <!-- Slide 18: Interpreting strace Output -->
+      <div class="slide">
+        <h2>🧐 Interpreting strace Output</h2>
+
+        <h3>Understanding Return Values</h3>
+        <div class="two-column">
+          <div>
+            <h4>✅ Success Cases</h4>
+            <ul>
+              <li>
+                <strong>Positive numbers:</strong> Success (often file
+                descriptors or bytes read/written)
+              </li>
+              <li>
+                <strong>Zero:</strong> Success (often end-of-file for read())
+              </li>
+            </ul>
+          </div>
+
+          <div>
+            <h4>❌ Error Cases</h4>
+            <ul>
+              <li><strong>-1:</strong> Error occurred</li>
+              <li><strong>ENOENT:</strong> File not found</li>
+              <li><strong>EACCES:</strong> Permission denied</li>
+              <li><strong>EBADF:</strong> Bad file descriptor</li>
+            </ul>
+          </div>
+        </div>
+
+        <h3>Real Example: File Operations</h3>
+        <pre><code># Python script doing file operations
+openat(AT_FDCWD, "data.txt", O_RDONLY) = 3        # Success: FD 3
+read(3, "Hello World\n", 4096) = 12              # Read 12 bytes
+read(3, "", 4096) = 0                           # End of file
+close(3) = 0                                    # Success
+
+openat(AT_FDCWD, "missing.txt", O_RDONLY) = -1 ENOENT (No such file or directory)</code></pre>
+
+        <h3>Using man 2 for Documentation</h3>
+        <div class="terminal">
+          man 2 open # Manual for open() system call man 2 read # Manual for
+          read() system call man 2 write # Manual for write() system call
+        </div>
+
+        <div class="highlight-box">
+          <h3>💡 Pro Tips</h3>
+          <ul>
+            <li><strong>man 2:</strong> System call documentation</li>
+            <li><strong>man 3:</strong> Library function documentation</li>
+            <li>
+              <strong>Filter noise:</strong> Use
+              <span class="inline-code">-e trace=file</span> to see only file
+              operations
+            </li>
+            <li>
+              <strong>Timestamps:</strong> Use
+              <span class="inline-code">-t</span> to see when calls happen
+            </li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- Slide 19: Practical Workshop Exercise -->
+      <div class="slide">
+        <h2>🛠️ Hands-On Exercise</h2>
+
+        <div class="highlight-box">
+          <h3>Workshop Challenge</h3>
+          <p>
+            Let's put it all together! We'll create a Python script and use all
+            three tools to analyze it.
+          </p>
+        </div>
+
+        <h3>Step 1: Create Test Script</h3>
+        <pre><code class="language-python"># workshop_demo.py
+import os
+import time
+
+print(f"Process started! PID: {os.getpid()}")
+
+# Create and write to a file
+with open("demo_output.txt", "w") as f:
+    f.write("Workshop data\n")
+    print("Wrote to demo_output.txt")
+
+# Open file for reading
+print("Opening file for reading...")
+file_handle = open("demo_output.txt", "r")
+print(f"File descriptor: {file_handle.fileno()}")
+
+print("Waiting 30 seconds for analysis...")
+time.sleep(30)
+
+# Read the file
+content = file_handle.read()
+print(f"File content: {content.strip()}")
+
+file_handle.close()
+print("File closed. Process ending.")</code></pre>
+
+        <h3>Step 2: Run Analysis Commands</h3>
+        <div class="terminal">
+          # Terminal 1: Run the script python3 workshop_demo.py # Terminal 2:
+          Find the process ps aux | grep workshop_demo # Terminal 3: Check open
+          files lsof -p [PID_FROM_STEP2] # Terminal 4: Trace system calls strace
+          -p [PID_FROM_STEP2] -e trace=openat,read,write,close
+        </div>
+      </div>
+
+      <!-- Slide 20: Summary -->
+      <div class="slide">
+        <h1>🎉 Summary & Next Steps</h1>
+        <div class="section-divider"><span>What We've Learned</span></div>
+
+        <div class="two-column">
+          <div>
+            <h3>🟢 NodeJS Mastery</h3>
+            <ul>
+              <li>✅ Understanding NodeJS and its benefits</li>
+              <li>✅ Writing zero-dependency programs</li>
+              <li>✅ Using npm for package management</li>
+              <li>✅ Building applications with dependencies</li>
+              <li>✅ Understanding libraries and their role</li>
+            </ul>
+          </div>
+
+          <div>
+            <h3>🖥️ Operating Systems Deep Dive</h3>
+            <ul>
+              <li>✅ OS fundamentals and kernel concepts</li>
+              <li>✅ Process management and system calls</li>
+              <li>
+                ✅ Process spelunking with <span class="inline-code">ps</span>
+              </li>
+              <li>
+                ✅ File descriptor analysis with
+                <span class="inline-code">lsof</span>
+              </li>
+              <li>
+                ✅ System call tracing with
+                <span class="inline-code">strace</span>
+              </li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="highlight-box">
+          <h3>🎯 Key Takeaways</h3>
+          <ul>
+            <li>
+              <strong>NodeJS:</strong> Powerful platform for server-side
+              JavaScript with rich ecosystem
+            </li>
+            <li>
+              <strong>System Tools:</strong> Essential for debugging,
+              monitoring, and understanding system behavior
+            </li>
+            <li>
+              <strong>Integration:</strong> These concepts work together in
+              real-world applications
+            </li>
+          </ul>
+        </div>
+
+        <div class="success-box">
+          <h3>🚀 Next Steps</h3>
+          <ul>
+            <li>Build a full-stack NodeJS application</li>
+            <li>Practice system debugging on your own projects</li>
+            <li>
+              Explore advanced tools like <span class="inline-code">perf</span>,
+              <span class="inline-code">htop</span>, and
+              <span class="inline-code">iotop</span>
+            </li>
+            <li>Learn about containerization with Docker</li>
+            <li>Dive deeper into Linux internals and kernel development</li>
+          </ul>
+        </div>
+
+        <div class="warning-box">
+          <h3>📚 Recommended Resources</h3>
+          <p>
+            <strong>NodeJS:</strong> Official docs, Express.js guide, npm best
+            practices
+          </p>
+          <p>
+            <strong>Linux:</strong> "Linux Programming Interface" book, kernel
+            documentation
+          </p>
+          <p>
+            <strong>System Tools:</strong> man pages, Linux tutorials, practice
+            environments
+          </p>
+        </div>
+      </div>
+    </div>
+
+    <div class="navigation">
+      <button class="nav-btn" id="prevBtn" onclick="changeSlide(-1)">
+        ← Previous
+      </button>
+      <button class="nav-btn" id="nextBtn" onclick="changeSlide(1)">
+        Next →
+      </button>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-javascript.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-bash.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-json.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-python.min.js"></script>
+
+    <script src="app.js"></script>
+  </body>
+</html>
